@@ -1,17 +1,17 @@
 <?php
 
-class Tranporte{
+class Transporte{
 private $codigoViaje;
 private $destinoViaje;
 private $cantMaxPasajeros;
-private $pasajeroViaje;//$pasajeroViaje =["nombre"=>$nombre,"apellido"=>$apellido,"docu"=>$docu];
+private $pasajerosViaje;//$pasajeroViaje =["nombre"=>$nombre,"apellido"=>$apellido,"docu"=>$docu];
 
 // Metodo constructor de la clase Transporte
 public function  __construct($codigo, $destino, $cantMax, $pasajero){   
     $this->codigoViaje = $codigo;
     $this->destinoViaje = $destino;    
     $this->cantMaxPasayeros = $cantMax;    
-    $this->pasajeroViaje = $pasajero;     
+    $this->pasajerosViaje = $pasajero;     
 }
 // Metodos de acceso
 public function getCodigoViaje(){
@@ -32,11 +32,19 @@ return $this->cantMaxPasajeros;
 public function setCantMaxPasajeros($cantMaxPasajeros){
 $this->cantMaxPasajeros = $cantMaxPasajeros;
 }
-public function getPasajeroViaje(){
-return $this->pasajeroViaje;
+public function getPasajerosViaje(){
+return $this->pasajerosViaje;
 }
-public function setPasajeroViaje($pasajeroViaje){
-$this->pasajeroViaje = $pasajeroViaje;
+public function setPasajerosViaje($pasajerosViaje){
+$this->pasajerosViaje = $pasajerosViaje;
+}
+//Metodo para convertir en string
+public function __toString(){
+    return "Codigo de viaje:".$this->getCodigoViaje().
+           "\nDestino del viaje:".$this->getDestinoViaje().
+           "\nLa cantidad maxima de pasajeros es de:".$this->getcantMaxPasajeros().
+           "\nLos datos los pasajeros son:".
+           "\n".print_r($this->getPasajerosViaje());
 }
 }
 
