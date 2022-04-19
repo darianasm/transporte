@@ -1,8 +1,13 @@
 <?php
 
+
+
 include 'Viaje.php';
-$pasajeros[0] = ["nombre"=>"Dariana","apellido"=>"Sosa","nroDocu"=>96023820];
-$viaje = new Viaje (12345,"bariloche",10,$pasajeros);
+include 'Pasajero.php';
+
+$pasajero[0] = new Pasajero("Dariana","Sosa",96023820,2995344876);
+$pasajero[1] = new Pasajero("Erika","Muñoz",96023823,2995186314);
+$viaje = new Viaje (12345,"bariloche",10,$pasajero);
 
 
 opciones($viaje);
@@ -72,8 +77,10 @@ while(strcasecmp($seguir,"Si")==0 && $i<$cantMaxima){
     $apellido = trim(fgets(STDIN));
     echo "Ingrese número de documento: ";
     $nroDocu = trim(fgets(STDIN));
+    echo "Ingrese número de Teléfono: ";
+    $tlfno = trim(fgets(STDIN));
 
-    $pasajero[$i] = ["nombre"=> $nombre, "apellido" => $apellido,"nroDocu"=>$nroDocu];
+    $pasajero[$i] = new Pasajero($nombre,$apellido,$nroDocu,$tlfno);
     $i++;
 
     if($i == $cantMaxima){
@@ -164,19 +171,21 @@ $maxPasajeros = $datos->getCantMaxPasajeros();
                         $apellidoNuevo = trim(fgets(STDIN));
                         echo "Ingrese número de documento: ";
                         $docuNuevo = trim(fgets(STDIN));
-                        $pasajeroNuevo = ["nombre" => $nombreNuevo,"apellido" => $apellidoNuevo, "nroDocu" => $docuNuevo];
+                        echo "Ingrese número de Telefono: ";
+                        $tlfnoNuevo = trim(fgets(STDIN));
+                        $pasajeroNuevo = new Pasajero($nombreNuevo,$apellidoNuevo,$docuNuevo,$tlfnoNuevo);
                         $datos->agregarPasajero($pasajeroNuevo);
                         echo "Los nuevos datos de los pasajeros son: ".$datos->stringPasajeros();
                     }else{
                         echo "ya llegó al límite la cantidad de pasajeros,\n
-                              si desea ingresa más pasajeros modifique la cantidad máxima de pasajeros";    
+                              si desea ingresar más pasajeros modifique la cantidad máxima de pasajeros";    
                     }
                     break;
             case 3:
                     echo "Ingrese número de documento del pasajero que desea modificar: ";
                     $nroDocuModificar = trim(fgets(STDIN));
                     if($datos->encontrarIndice($nroDocuModificar) != -1){
-                    modificarDatosPasajeros($datos->encontrarIndice($nroDocuModificar),$datos);
+                    modificarDatosPasajero($datos->encontrarIndice($nroDocuModificar),$datos);
                     }else{
                     echo "El número de documento no se encuentra entre los pasajeros, intente otra vez\n";
                     } 
@@ -192,7 +201,7 @@ $maxPasajeros = $datos->getCantMaxPasajeros();
  * @param int $indice;
  * @param object $datosViaje;
  */
-function modificarDatosPasajeros($indice,$datosViaje){
+function modificarDatosPasajero($indice,$datosViaje){
 $datosPasajero = $datosViaje->getPasajerosViaje();
     do{
         echo "------Ingrese que datos desea modificar del pasajero------\n"
@@ -207,17 +216,17 @@ $datosPasajero = $datosViaje->getPasajerosViaje();
         switch($eleccion){
             case 1:echo "Ingrese nombre nuevo del pasajero: ";
                         $nombreNuevo = trim(fgets(STDIN));
-                        $datosPasajero[$indice]["nombre"] = $nombreNuevo;
+                        $datosPasajero[$indice]->setNombre($nombreNuevo);
                         $datosViaje->setPasajerosViaje($datosPasajero);
                         break;
             case 2:echo "Ingrese apellido nuevo del pasajero: ";  
                         $apellidoNuevo = trim(fgets(STDIN));
-                        $datosPasajero[$indice]["apellido"] = $apellidoNuevo;
+                        $datosPasajero[$indice]->setNombre($apellidoNuevo);
                         $datosViaje->setPasajerosViaje($datosPasajero);
                         break;
             case 3:echo "Ingrese numero de documento nuevo del pasajero: ";
                         $docuNuevo = trim(fgets(STDIN));
-                        $datosPasajero[$indice]["nroDocu"] = $docuNuevo;
+                        $datosPasajero[$indice]->setNombre($docuNuevo);
                         $datosViaje->setPasajerosViaje($datosPasajero);
                         break;
             case 4: "Volviendo al menú de modificar la colección de pasajeros...\n";break;
@@ -234,3 +243,24 @@ function mostrarDatos($datos){
 echo $datos;
 }
 ?>
+
+ * Modificar la clase Viaje para que ahora los pasajeros sean un objeto que tenga los atributos 
+   nombre, apellido, numero de documento y teléfono. 
+   
+ * El viaje ahora contiene una referencia a una colección de objetos de la clase Pasajero. 
+  
+ * También se desea guardar la información de la persona responsable de realizar el viaje, 
+   para ello cree una clase ResponsableV que registre el número de empleado, número de licencia, nombre y apellido. 
+  
+ * La clase Viaje debe hacer referencia al responsable de realizar el viaje.
+  
+ * Volver a implementar las operaciones que permiten modificar el nombre, apellido y teléfono de un pasajero. 
+ 
+ * Luego implementar la operación que agrega los pasajeros al viaje, solicitando por consola la información de los mismos. 
+ 
+ * Se debe verificar que el pasajero no este cargado mas de una vez en el viaje. 
+ 
+ * De la misma forma cargue la información del responsable del viaje.
+  
+ * Nota: Recuerden que deben enviar el link a la resolución en su repositorio en GitHub
+ 

@@ -4,13 +4,13 @@ class Viaje{
 private $codigoViaje;
 private $destinoViaje;
 private $cantMaxPasajeros;
-private $pasajerosViaje;//$pasajeroViaje =["nombre"=>$nombre,"apellido"=>$apellido,"nroDocu"=>$docu];
+private $pasajerosViaje;//$pasajero[0] = new Pasajero(Dariana,Sosa,96023820,2995344876);;
 
 // Metodo constructor de la clase Viaje
 public function  __construct($codigo, $destino, $cantMax, $pasajero){   
     $this->codigoViaje = $codigo;
     $this->destinoViaje = $destino;    
-    $this->cantMaxPasayeros = $cantMax;    
+    $this->cantMaxPasajeros = $cantMax;    
     $this->pasajerosViaje = $pasajero;     
 }
 // Metodos de acceso de la clase Viaje
@@ -49,7 +49,7 @@ $pasajeros = $this->getPasajerosViaje();
 $pasajeroNuevo = [];
 $j = 0;
 for($i = 0; $i< count($pasajeros);$i++){
-    if($pasajeros[$i]["nroDocu"] != $docu){
+    if($pasajeros[$i]->getDocumento != $docu){
     $pasajeroNuevo[$j] = $pasajeros[$i];
     $j++;
     }
@@ -68,11 +68,9 @@ $j = 1;
 for($i = 0; $i<(count($pasajeros));$i++){
 $string = $string.
           "\nPASAJERO ".($j++)
-         ."\nNombre: ".$pasajeros[$i]["nombre"]
-         ."\nApellido: ".$pasajeros[$i]["apellido"]
-         ."\nNúmero de Documento: ".$pasajeros[$i]["nroDocu"]."\n";
+         .$pasajeros[$i];
+         
 }
-
 return $string;
 }
 
@@ -98,7 +96,7 @@ $pasajeros = $this->getPasajerosViaje();
 $encontrado = -1;
 $i=0;
 while($i<count($pasajeros) && $encontrado == -1){
-if($pasajeros[$i]["nroDocu"] == $docu){
+if($pasajeros[$i]->getDocumento() == $docu){
 $encontrado = $i;
 }
 $i++;
@@ -110,8 +108,8 @@ return $encontrado;
 public function __toString(){
     return "Codigo de viaje: ".$this->getCodigoViaje().
            "\nDestino del viaje: ".$this->getDestinoViaje().
-           "\nLa cantidad maxima de pasajeros es de: ".$this->getcantMaxPasajeros().
-           "\nLos datos los pasajeros son: ".$this->stringPasajeros();
+           "\nLa cantidad maxima de pasajeros es de: ".$this->getCantMaxPasajeros().
+           "\nLos datos los pasajeros son: \n".$this->stringPasajeros()."\n";
 }
 }
 
