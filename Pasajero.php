@@ -15,6 +15,7 @@ public function  __construct($nombre, $apellido, $dni,$telefono){
     $this->telefono = $telefono;
 }
 
+//metodos de acceso
 public function getNombre(){
 return $this->nombre;
 }
@@ -40,6 +41,7 @@ public function setTelefono($telefono){
 $this->telefono = $telefono;
 }
 
+//metodo que convierte a string
 public function __toString(){
     return "\nNombre: ".$this->getNombre().
            "\nApellido: ".$this->getApellido().

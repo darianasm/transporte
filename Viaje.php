@@ -4,14 +4,16 @@ class Viaje{
 private $codigoViaje;
 private $destinoViaje;
 private $cantMaxPasajeros;
-private $pasajerosViaje;//$pasajero[0] = new Pasajero(Dariana,Sosa,96023820,2995344876);;
+private $pasajerosViaje;//$pasajero[0] = new Pasajero(Dariana,Sosa,96023820,2995344876);
+private $responsable;//$responsable = new Responsable(1,98765,"Pablo","Herrera");
 
 // Metodo constructor de la clase Viaje
-public function  __construct($codigo, $destino, $cantMax, $pasajero){   
+public function  __construct($codigo, $destino, $cantMax, $pasajero, $respon){   
     $this->codigoViaje = $codigo;
     $this->destinoViaje = $destino;    
     $this->cantMaxPasajeros = $cantMax;    
     $this->pasajerosViaje = $pasajero;     
+    $this->responsable = $respon;
 }
 // Metodos de acceso de la clase Viaje
 public function getCodigoViaje(){
@@ -38,6 +40,12 @@ return $this->pasajerosViaje;
 public function setPasajerosViaje($pasajerosViaje){
 $this->pasajerosViaje = $pasajerosViaje;
 }
+public function getResponsable(){
+return $this->responsable;
+}
+public function setResponsable($responsable){
+$this->responsable = $responsable;
+}
 
 /**
  * crea una nueva colección omitiendo al pasajero según su nro de deocumento
@@ -59,7 +67,7 @@ $this->setPasajerosViaje($pasajeroNuevo);
 
 /**
  * crea una variable string con los datos de los pasajeros
- * @return string $string;
+ * @return String $string;
  */
 public function stringPasajeros(){
 $pasajeros = $this->getPasajerosViaje();
@@ -77,12 +85,32 @@ return $string;
 /**
  * agregar un arreglo aosciativo de un pasajero a una colección de pasajeros
  * modifica el arreglo de pasajeros anterior
- * @param array $pasajero
+ * @param object $pasajero
  */
 public function agregarPasajero($pasajero){
 $pasajeros = $this->getPasajerosViaje();
 array_push($pasajeros,$pasajero);
 $this->setPasajerosViaje($pasajeros);
+}
+
+/**
+ * verifica si ya un pasajero ha sido ingresado por su numero de documento
+ * @param object $pasajero
+ * @return boolean $existe
+ */
+public function existePasajero($pasajero){
+$pasajeros = $this->getPasajerosViaje();
+$existe = false;
+for($i = 0; $i<count($pasajeros); $i++){
+    if($pasajeros[$i]->getDocumento() == $pasajero->getDocumento() &&
+       strcasecmp($pasajeros[$i]->getNombre(), $pasajero->getNombre()) == 0 &&
+       strcasecmp($pasajeros[$i]->getApellido(), $pasajero->getApellido()) == 0 &&
+       $pasajeros[$i]->getTelefono() == $pasajero->getTelefono()){
+        
+        $existe = true;
+    }
+}
+return $existe;
 }
 
 /**
@@ -109,8 +137,11 @@ public function __toString(){
     return "Codigo de viaje: ".$this->getCodigoViaje().
            "\nDestino del viaje: ".$this->getDestinoViaje().
            "\nLa cantidad maxima de pasajeros es de: ".$this->getCantMaxPasajeros().
-           "\nLos datos los pasajeros son: \n".$this->stringPasajeros()."\n";
+           "\n\nLos datos los pasajeros son: \n".$this->stringPasajeros().
+           "\nLos datos del responsable del viaje son: ".$this->getResponsable()."\n";
 }
+
+
 }
 
 ?>
