@@ -94,26 +94,6 @@ $this->setPasajerosViaje($pasajeros);
 }
 
 /**
- * verifica si ya un pasajero ha sido ingresado por su numero de documento
- * @param object $pasajero
- * @return boolean $existe
- */
-public function existePasajero($pasajero){
-$pasajeros = $this->getPasajerosViaje();
-$existe = false;
-for($i = 0; $i<count($pasajeros); $i++){
-    if($pasajeros[$i]->getDocumento() == $pasajero->getDocumento() &&
-       strcasecmp($pasajeros[$i]->getNombre(), $pasajero->getNombre()) == 0 &&
-       strcasecmp($pasajeros[$i]->getApellido(), $pasajero->getApellido()) == 0 &&
-       $pasajeros[$i]->getTelefono() == $pasajero->getTelefono()){
-        
-        $existe = true;
-    }
-}
-return $existe;
-}
-
-/**
  * encuentra el indice en donde se encuentra el pasajero en el array según su nro de documento
  * si no encuentra el indice retorta -1
  * @param int $docu

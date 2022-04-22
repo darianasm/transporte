@@ -87,7 +87,7 @@ while(strcasecmp($seguir,"Si")==0 && $i<$cantMaxima){
 
     $pasajero[$i] = new Pasajero($nombre,$apellido,$nroDocu,$tlfno);
     
-    if($datosViaje->existePasajero($pasajero[$i])){
+    if($datosViaje->encontrarIndice($nroDocu) != -1){
         echo "Este pasajero ya ha sido ingresado, ingrese otro\n";
     }else{
        $datosViaje->agregarPasajero($pasajero[$i]);    
