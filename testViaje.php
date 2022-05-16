@@ -3,23 +3,34 @@
 include 'Viaje.php';
 include 'Pasajero.php';
 include 'Responsable.php';
+include 'Terrestre.php';
+include 'Aereo.php';
 
+$responsable1 = new Responsable(1,98765,"Pablo","Herrera");
 $pasajero[0] = new Pasajero("Dariana","Sosa",96023820,2995344876);
 $pasajero[1] = new Pasajero("Erika","Muñoz",96023823,2995186314);
 
-$responsable = new Responsable(1,98765,"Pablo","Herrera");
+$responsable2 = new Responsable(2,45832,"Jose","Lopez");
+$pasajero[2] = new Pasajero("Dariana","Sosa",96023820,2995344876);
+$pasajero[3] = new Pasajero("Diego","Herrera",96015823,299);
 
-$viaje = new Viaje (12345,"bariloche",10,$pasajero, $responsable);
+$viaje1 = new Terrestre (1,"bariloche",5,$responsable1, 500, "no", "cama");
+$viaje2 = new Aereo (2,"venezuela",4, $responsable2, 100, "si", 3, "no", "airlains",2);
 
-opciones($viaje);
+$pasajero[0]->setImporte($viaje2->venderPasaje($pasajero[0]));    
+$pasajero[1]->setImporte($viaje2->venderPasaje($pasajero[1]));
+
+opciones($viaje2);
+
 /**
  * función que da un menú para realizar lo que quiera el usuario
  * @param object $datosViaje
  * 
  */
 function opciones($datosViaje){
+
 do{
-    echo "------Menú de opciones del viaje------\n"
+    echo "\n------Menú de opciones del viaje------\n"
         ."1) Ingresar datos de un nuevo viaje.\n"
         ."2) Modificar datos.\n"
         ."3) Ver datos.\n"
@@ -30,14 +41,55 @@ do{
 
     //sale del programa o llama a los metodos dependiendo de la elección del usuario
     switch($eleccion){
-        case 1:$datosViaje->setPasajerosViaje([]);
-               ingresarDatos($datosViaje);break;
+        case 1:$datosViaje = ingresarTipoViaje();
         case 2:modificarDatos($datosViaje);break;
         case 3:mostrarDatos($datosViaje);break;
         case 4:echo "Programa finalizado";break;
         default:echo "Elección ingresada no valida, intente otra vez";break;
     }
 }while($eleccion!=4);
+}
+
+function ingresarTipoViaje(){
+echo "¿Desea ingresar Datos de un Viaje Terrestre o Aereo?
+      A) Aereo
+      T) Terrestre\n";
+
+$tipoViaje = trim(fgets(STDIN));
+
+switch($tipoViaje){
+    case 'A':
+            $responsable = new Responsable(0,0,"","");
+            $viajeDat =  new Aereo (0,"",0, $responsable, 0, "", 0, "", "",0);
+            ingresarDatos($viajeDat);
+            
+            echo "ingrese número de vuelo: ";
+            $numVuelo = trim(fgets(STDIN));
+            echo "ingrese si el viaje es primera clase o no: ";
+            $primerClas = trim(fgets(STDIN));
+            echo "ingrese nombre de la aerolinea: ";
+            $aerolinea = trim(fgets(STDIN));
+            echo "ingrese la cantidad de escalas que tendrá el viaje";
+            $cantEsc = trim(fgets(STDIN));
+            
+            $viajeDat->setNumeroVuelo($numVuelo);
+            $viajeDat->setCategAsiento($primerClas);
+            $viajeDat->setNombreAerolinea($aerolinea);
+            $viajeDat->setCantEscalas($cantEsc);break;
+
+    case 'T':
+            $responsable = new Responsable(0,0,"","");
+            $viajeDat = new Terrestre (0,"",0,$responsable, 0, "", "");
+            ingresarDatos($viajeDat);
+            
+            echo "ingrese si el asiento es semicama o cama: ";
+            $asiento = trim(fgets(STDIN));
+
+            $viajeDat->setComodidadAsiento($asiento);break;
+
+    default:echo "Elección ingresada no valida, intente otra vez";break;
+}
+return $viajeDat;
 }
 
 /**
@@ -52,10 +104,17 @@ echo "Ingrese destino del viaje: ";
 $desti = trim(fgets(STDIN));
 echo "Ingrese cantidad maxima de pasajeros: " ;
 $maxima = trim(fgets(STDIN));
+echo "Ingrese importe del viaje: " ;
+$importe = trim(fgets(STDIN));
+echo "Ingrese si el viaje es de ida y vuelta: " ;
+$idaYVuelta = trim(fgets(STDIN));
 
 $viaje->setCodigoViaje($cod);
 $viaje->setDestinoViaje($desti);
 $viaje->setCantMaxPasajeros($maxima);
+$viaje->setImporte($importe);
+$viaje->setIdaVuelta($idaYVuelta);
+
 ingresarPasajeros($viaje);
 ingresarResponsable($viaje);
 
@@ -74,7 +133,7 @@ $seguir = "si";
 echo "---Ingrese pasajeros---\n";
 
 //strcasemp() para comparar el 'si' sin importar las mayúsculas o minúsculas
-while(strcasecmp($seguir,"Si")==0 && $i<$cantMaxima){
+while(strcasecmp($seguir,"Si")==0 && $datosViaje->hayPasajesDisponibles()){
 
     echo "Ingrese nombre del pasajero: ";
     $nombre = trim(fgets(STDIN));
@@ -90,11 +149,11 @@ while(strcasecmp($seguir,"Si")==0 && $i<$cantMaxima){
     if($datosViaje->encontrarIndice($nroDocu) != -1){
         echo "Este pasajero ya ha sido ingresado, ingrese otro\n";
     }else{
-       $datosViaje->agregarPasajero($pasajero[$i]);    
+        echo "Importe a pagar: ". $pasajero[$i]->setImporte($datosViaje->venderPasaje($pasajero[$i]));    
     }
     $i++;
-    
-    if($i == $cantMaxima){
+
+    if(!$datosViaje->hayPasajesDisponibles()){
         echo "Ya llegó a la cantidad límite de pasajeros\n";
     }else{
         echo "¿Desea seguir ingresando más pasajeros?\nIngrese 'Si' para continuar, 'No' para parar: ";    
@@ -105,6 +164,7 @@ echo "Los datos de los pasajeros actualmente son: ".$datosViaje->stringPasajeros
 }
 
 function ingresarResponsable($datosViaje){
+
 echo "---Ingrese datos del Responsable del Viaje---\n";
 echo "Ingrese número de empleado: ";
 $empleado = trim(fgets(STDIN));
@@ -119,6 +179,8 @@ $datosViaje->getResponsable()->setNumEmpleado($empleado);
 $datosViaje->getResponsable()->setNumLicencia($licencia);
 $datosViaje->getResponsable()->setNombre($nombre);
 $datosViaje->getResponsable()->setApellido($apellido);
+
+
 }
 
 /**
@@ -132,11 +194,27 @@ function modificarDatos($viaje){
             ."2) Destino.\n"
             ."3) Cantidad MAXIMA de pasajeros.\n"
             ."4) Pasajeros.\n"
-            ."5) Responsable.\n"
-            ."6) Volver al Menú Principal.\n";
+            ."5) Responsable.\n";
+            
+        if(get_class($viaje) == "Terrestre"){
+        echo "6) Comodidad del asiento.\n";
         
+        }elseif(get_class($viaje) == "Aereo"){
+        echo "6) Número de vuelo.\n."
+            ."7) Categoría del asiento.\n"
+            ."8) Nombre de la aerolínea.\n"
+            ."9) Cantidad de escalas.\n";
+        }
+        
+        echo "0) Volver al Menú principal.\n";
+
         echo "Ingrese su eleccion: ";
         $eleccion = trim(fgets(STDIN));
+
+        if($eleccion>= 6 && $eleccion<=9){
+        modificarDatosTerrestre($eleccion,$viaje);
+        modificarDatosAereo($eleccion,$viaje);
+        }else{
         
         //llama al metodo escogido por el usuario 
         switch($eleccion){
@@ -156,11 +234,43 @@ function modificarDatos($viaje){
                         break;
             case 4:modificarPasajeros($viaje);break;
             case 5:modificarResponsable($viaje);break;
-            case 6: echo "Volviendo al menú principal...\n";break;
+            case 0: echo "Volviendo al menú principal...\n";break;
             default:echo "Elección inexistente, ingrese otra\n";break;
         }
-    }while($eleccion!=6);
+        }
+    }while($eleccion!=0);
 
+}
+
+function modificarDatosTerrestre($eleccion,$viajeTerrestre){
+echo "6) Comodidad del asiento.\n";
+if($eleccion == 6){
+    echo "Ingrese comodidad del asiento, si es semicama o cama: ";
+    $comodidad = trim(fgets(STDIN));
+    $viajeTerrestre->setComodidadAsiento($comodidad);
+}
+}
+
+function modificaDatosAereo($eleccion,$viajeAereo){
+echo "6) Número de vuelo.\n."
+    ."7) Categoría del asiento.\n"
+    ."8) Nombre de la aerolínea.\n"
+    ."9) Cantidad de escalas.\n";
+
+switch($eleccion){
+    case 6:echo "Ingrese nuevo número de vuelo: ";
+        $num = trim(fgets(STDIN));
+        $viajeAereo->setNumeroVuelo($num);break;
+    case 7:echo "Ingrese categoría del asiento, si es primera clase o no: ";
+        $categ = trim(fgets(STDIN));
+        $viajeAereo->setCategAsiento($categ);break;
+    case 8:echo "Ingrese nombre nuevo de la aerolínea: ";
+        $nom = trim(fgets(STDIN));
+        $viajeAereo->setNombreAerolinea($nom);break;    
+    case 9:echo "Ingrese nueva cantidad de escalas: ";
+        $cant = trim(fgets(STDIN));
+        $viajeAereo->setCantEscalas($cant);break;
+    } 
 }
 
 /**
@@ -172,6 +282,8 @@ function modificarPasajeros($datos){
 $datosPasajero = $datos->getPasajerosViaje();
 $longPasajeros = count($datosPasajero);
 $maxPasajeros = $datos->getCantMaxPasajeros();
+echo "Los datos de los pasajeros actualmente son: \n".$datos->stringPasajeros();
+
     do{
         echo "------Ingrese que desea hacer con los datos de los pasajeros------\n"
             ."1) Eliminar un pasajero.\n"

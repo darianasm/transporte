@@ -6,6 +6,7 @@ private $nombre;
 private $apellido;
 private $documento;
 private $telefono;
+private $importe;
 
 public function  __construct($nombre, $apellido, $dni,$telefono){
     // Metodo constructor de la clase pasajero
@@ -13,6 +14,7 @@ public function  __construct($nombre, $apellido, $dni,$telefono){
     $this->apellido = $apellido;
     $this->documento = $dni;
     $this->telefono = $telefono;
+    $this->importe = 0;
 }
 
 //metodos de acceso
@@ -40,14 +42,23 @@ return $this->telefono;
 public function setTelefono($telefono){
 $this->telefono = $telefono;
 }
+public function getImporte(){
+return $this->importe;
+}
+public function setImporte($importe){
+$this->importe = $importe;
+}
 
 //metodo que convierte a string
 public function __toString(){
     return "\nNombre: ".$this->getNombre().
            "\nApellido: ".$this->getApellido().
            "\nNúmero de documento: ".$this->getDocumento().
-           "\nTeléfono: ".$this->getTelefono()."\n";
-    }
+           "\nTeléfono: ".$this->getTelefono().
+           "\nImporte a pagar: ".$this->getImporte()."\n";
+}
+
+
 
 }
 ?>

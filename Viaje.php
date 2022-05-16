@@ -6,15 +6,20 @@ private $destinoViaje;
 private $cantMaxPasajeros;
 private $pasajerosViaje;//$pasajero[0] = new Pasajero(Dariana,Sosa,96023820,2995344876);
 private $responsable;//$responsable = new Responsable(1,98765,"Pablo","Herrera");
+private $importe;
+private $idaVuelta;
 
 // Metodo constructor de la clase Viaje
-public function  __construct($codigo, $destino, $cantMax, $pasajero, $respon){   
+public function  __construct($codigo, $destino, $cantMax, $respon, $import, $idaVuel){   
     $this->codigoViaje = $codigo;
     $this->destinoViaje = $destino;    
     $this->cantMaxPasajeros = $cantMax;    
-    $this->pasajerosViaje = $pasajero;     
+    $this->pasajerosViaje = [];     
     $this->responsable = $respon;
+    $this->importe = $import;     
+    $this->idaVuelta = $idaVuel;
 }
+
 // Metodos de acceso de la clase Viaje
 public function getCodigoViaje(){
 return $this->codigoViaje;
@@ -45,6 +50,18 @@ return $this->responsable;
 }
 public function setResponsable($responsable){
 $this->responsable = $responsable;
+}
+public function getIdaVuelta(){
+return $this->idaVuelta;
+}
+public function setIdaVuelta($idaVuelta){
+$this->idaVuelta = $idaVuelta;
+}
+public function getImporte(){
+return $this->importe;
+}
+public function setImporte($importe){
+$this->importe = $importe;
 }
 
 /**
@@ -118,9 +135,36 @@ public function __toString(){
            "\nDestino del viaje: ".$this->getDestinoViaje().
            "\nLa cantidad maxima de pasajeros es de: ".$this->getCantMaxPasajeros().
            "\n\nLos datos los pasajeros son: \n".$this->stringPasajeros().
-           "\nLos datos del responsable del viaje son: ".$this->getResponsable()."\n";
+           "\nLos datos del responsable del viaje son: ".$this->getResponsable().
+           "\nEl importe del viaje es: ".$this->getImporte().
+           "\nEl viaje es de ida y vuelta: ".$this->getIdaVuelta()."\n";
 }
 
+public function venderPasaje($pasajero){
+$idaVuel = $this->getIdaVuelta();
+$multiplicar = null;
+
+if($this->hayPasajesDisponibles()){
+    $this->agregarPasajero($pasajero);
+    $multiplicar = 1;
+    if($idaVuel == "si"){
+        $multiplicar = 2;
+    }
+
+}
+return $multiplicar;
+}
+
+public function hayPasajesDisponibles(){
+$cantPasajeros = count($this->getPasajerosViaje());
+$maximaCant = $this->getCantMaxPasajeros();
+$disponible = false;
+
+if($cantPasajeros < $maximaCant){
+$disponible = true;
+}
+return $disponible;
+}
 
 }
 
